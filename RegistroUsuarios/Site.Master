@@ -13,14 +13,32 @@
     <title><%:Page.Title %> Registro de Usuarios</title>
     <!--<asp:ContentPlaceHolder ID="head" runat="server">
     </asp:ContentPlaceHolder>-->
-
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <asp:PlaceHolder runat="server"></asp:PlaceHolder>
 </head>
 <body>
     <form runat="server">
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid"></div>
-            <div class="navbar-header"></div>
+        <nav class="navbar navbar-inverse" role="navigation">
+            <a class="navbar-brand" href="Default.aspx" style="font-size:30px" runat="server" >Inicio</a>
+           <div class="collapse navbar-collapse" id="myNavbar">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle " data-toggle="dropdown" style="font-size:30px">Registros<span class="caret"></span></a>
+                            <ul class="dropdown-menu" style=" font-size:25px">
+                                <li><a href="/Registros/rUsuarios.aspx">Usuarios</a></li>  
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown"  style="font-size:30px">Consultas<span class="caret"></span></a>
+                            <ul class="dropdown-menu" style=" font-size:25px">
+                                <li><a href="/Consultas/cUsuarios.aspx">Usuarios</a></li>
+                            </ul>
+                        </li>
+                    </ul>            
+                </div> 
         </nav>
         <div class=" container body-content">
             <asp:ContentPlaceHolder ID="MainContent" runat="server">
