@@ -1,0 +1,35 @@
+﻿<%@ Master
+    Language="C#"
+    AutoEventWireup="true"
+    CodeBehind="Site.master.cs"
+    Inherits="RegistroUsuarios.Site" %>
+
+<!DOCTYPE html>
+
+<html lang="es">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%:Page.Title %> Registro de Usuarios</title>
+    <!--<asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>-->
+
+    <asp:PlaceHolder runat="server"></asp:PlaceHolder>
+</head>
+<body>
+    <form runat="server">
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid"></div>
+            <div class="navbar-header"></div>
+        </nav>
+        <div class=" container body-content">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server">
+            </asp:ContentPlaceHolder>
+            <hr />
+            <footer>
+                <p>&copy; <%: DateTime.Now.Year %> - Registro de usuarios</p>
+            </footer>
+        </div>
+    </form>
+</body>
+</html>
