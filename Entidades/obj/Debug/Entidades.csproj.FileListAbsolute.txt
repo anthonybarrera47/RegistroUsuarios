@@ -1,5 +1,0 @@
-C:\Users\antho\source\repos\RegistroUsuarios\Entidades\bin\Debug\Entidades.dll
-C:\Users\antho\source\repos\RegistroUsuarios\Entidades\bin\Debug\Entidades.pdb
-C:\Users\antho\source\repos\RegistroUsuarios\Entidades\obj\Debug\Entidades.csproj.CoreCompileInputs.cache
-C:\Users\antho\source\repos\RegistroUsuarios\Entidades\obj\Debug\Entidades.dll
-C:\Users\antho\source\repos\RegistroUsuarios\Entidades\obj\Debug\Entidades.pdb
