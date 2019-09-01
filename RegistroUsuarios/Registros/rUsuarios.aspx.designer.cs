@@ -103,22 +103,40 @@ namespace RegistroUsuarios.Registros {
         protected global::System.Web.UI.WebControls.RequiredFieldValidator RFVConfirmarContrasenia;
         
         /// <summary>
-        /// AdministradorRadioButton control.
+        /// lb_AdministradorRadioButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton AdministradorRadioButton;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lb_AdministradorRadioButton;
         
         /// <summary>
-        /// UsuarioRadioButton control.
+        /// AdministradorRadioB control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RadioButton UsuarioRadioButton;
+        protected global::System.Web.UI.WebControls.RadioButton AdministradorRadioB;
+        
+        /// <summary>
+        /// lbl_UsuariosRadioButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl lbl_UsuariosRadioButton;
+        
+        /// <summary>
+        /// UsuariosRadioButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButton UsuariosRadioButton;
         
         /// <summary>
         /// NuevoButton control.

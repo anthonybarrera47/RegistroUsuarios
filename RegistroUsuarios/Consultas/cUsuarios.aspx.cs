@@ -19,7 +19,6 @@ namespace RegistroUsuarios.Consultas
         }
         protected void BuscarButton_Click(object sender, EventArgs e)
         {
-            //Inicializando el filtro en True
             Expression<Func<Usuarios, bool>> filtro = x => true;
             RepositorioBase<Usuarios> repositorio = new RepositorioBase<Usuarios>();
 

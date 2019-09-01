@@ -8,6 +8,7 @@ using System.Web.UI.WebControls;
 using BLL;
 using Entidades;
 using System.Linq.Expressions;
+using System.Web.UI.HtmlControls;
 
 namespace RegistroUsuarios.Registros
 {
@@ -18,7 +19,6 @@ namespace RegistroUsuarios.Registros
             if (!Page.IsPostBack)
             {
                 Limpiar();
-                //si llego in id
                 int id = (Request.QueryString["id"]).ToInt();
                 if (id > 0)
                 {
@@ -32,9 +32,8 @@ namespace RegistroUsuarios.Registros
                 }
                 else
                 {
-                    NuevoButton_Click(null, null);
+                    Limpiar();
                 }
-
             }
         }
         protected void NuevoButton_Click(object sender, EventArgs e)
@@ -48,7 +47,6 @@ namespace RegistroUsuarios.Registros
             NombreUsuarioTextBox.Text = string.Empty;
             ClaveTextBox.Text = string.Empty;
             ClaveConfTextBox.Text = string.Empty;
-            UsuarioRadioButton.Checked = true;
         }
         protected void GuardarButton_Click(object sender, EventArgs e)
         {
@@ -80,17 +78,12 @@ namespace RegistroUsuarios.Registros
             }
                 
             if (paso)
-            {
-                //Extensores.MostrarMensaje(this, GetType(), "Popup", "succesalert()", true);
+            { 
                 Alerta(1);
                 Limpiar();
             }
             else
-            {
-                //Extensores.MostrarMensaje(this, GetType(), "Popup", "erroralert()", true);
-
                 Alerta(2);
-            }
             repositorio.Dispose();
         }
         public bool ValidarUsuario()
@@ -107,6 +100,7 @@ namespace RegistroUsuarios.Registros
                 Alerta(3);
                 paso = false;
             }
+            repositorio.Dispose();
             return paso;
         }
         private void Alerta(int tipoError)
@@ -129,7 +123,7 @@ namespace RegistroUsuarios.Registros
             user.Nombre = NombreTextBox.Text;
             user.UserName = NombreUsuarioTextBox.Text;
             user.Password = ClaveTextBox.Text.SHA1();
-            user.TipoUsuario = AdministradorRadioButton.Checked ? "A" : "U";
+            user.TipoUsuario = GetTipoUsuario();
             return user;
         }
         private void LlenaCampos(Usuarios user)
@@ -139,7 +133,7 @@ namespace RegistroUsuarios.Registros
             NombreUsuarioTextBox.Text = user.UserName;
             ClaveTextBox.Text = user.Password.SHA1();
             ClaveConfTextBox.Text = user.Password.SHA1();
-            AdministradorRadioButton.Checked = user.TipoUsuario.Equals("A") ? true : false;
+            AdministradorRadioB.Checked = user.TipoUsuario.Equals("A") ? true : false;
         }
         protected void EliminarButton_Click(object sender, EventArgs e)
         {
@@ -155,25 +149,7 @@ namespace RegistroUsuarios.Registros
                 repositorio.Eliminar(id);
                 Alerta(1);
             }
-
             repositorio.Dispose();
-        }
-
-        public static string CheckEmail(string NombreUsuario)
-        {
-            String value = string.Empty;
-            RepositorioBase<Usuarios> repositorio = new RepositorioBase<Usuarios>();
-            List<Usuarios> ListaUsuarios = repositorio.GetList(x => x.UserName.Equals(NombreUsuario));
-            if (ListaUsuarios.Count > 0)
-            {
-                value = "true";
-            }
-            else
-            {
-                value = "false";
-            }
-
-            return value;
         }
         private bool ValidarClave()
         {
@@ -181,13 +157,23 @@ namespace RegistroUsuarios.Registros
             {
                 Alerta(4);
                 return false;
-            }
-                
+            }  
             return true;
         }
-        protected void NombreUsuarioTextChanged(object sender, EventArgs e)
+        private string GetTipoUsuario()
         {
-            Page.ClientScript.RegisterStartupScript(this.GetType(), "ExisteUsuario", "ExisteUsuario()", true);
+            string value;
+            List<Tuple<RadioButton, HtmlGenericControl>> listRadio = new List<Tuple<RadioButton, HtmlGenericControl>>();
+            listRadio.Add(new Tuple<RadioButton, HtmlGenericControl>(AdministradorRadioB, lb_AdministradorRadioButton));
+            listRadio.Add(new Tuple<RadioButton, HtmlGenericControl>(UsuariosRadioButton, lbl_UsuariosRadioButton));
+
+            foreach (Tuple<RadioButton, HtmlGenericControl> objPair in listRadio)
+            {
+                objPair.Item2.Attributes["class"] = "btn btn-default " + (objPair.Item1.Checked ? " active" : "");
+                objPair.Item2.Attributes["onclick"] = "javascript:setTimeout('__doPostBack(\\'" + objPair.Item1.ClientID + "\\',\\'\\')', 0);";
+            }
+            value = AdministradorRadioB.Checked ? "A" :  "U";
+            return value;
         }
         //ScriptManager.RegisterStartupScript(this, GetType(), "Popup", "successalert();", true);
     }

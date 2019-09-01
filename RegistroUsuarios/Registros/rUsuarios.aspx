@@ -7,6 +7,7 @@
     Inherits="RegistroUsuarios.Registros.rUsuarios" %>
 
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type="text/javascript"></script>
     <script type="text/javascript">
         function successalert() {
             swal({
@@ -62,7 +63,7 @@
                 <div class="form-group">
                     <label for="NombreTextBox" class="col-md-3 control-label input-sm">Nombre</label>
                     <div class="col-md-6">
-                        <asp:TextBox ID="NombreTextBox" runat="server"
+                        <asp:TextBox ID="NombreTextBox" placeHolder="Nombre" runat="server"
                             Class="form-control input-sm"></asp:TextBox>
                         <asp:RequiredFieldValidator
                             runat="server" ID="RFVNombreTextBox"
@@ -79,8 +80,8 @@
                 <div class="form-group">
                     <label for="NombreUsuarioTextBox" class="col-md-3 control-label input-sm">Nombre de Usuario</label>
                     <div class="col-md-6">
-                        <asp:TextBox ID="NombreUsuarioTextBox" runat="server"
-                            Class="form-control input-sm" OnTextChanged="NombreUsuarioTextChanged"></asp:TextBox>
+                        <asp:TextBox ID="NombreUsuarioTextBox" placeHolder="Nombre de usuarios" runat="server"
+                            Class="form-control input-sm"></asp:TextBox>
                         <asp:RequiredFieldValidator
                             runat="server" ID="RFVNombreUsuarioTextBox"
                             ControlToValidate="NombreUsuarioTextBox" ForeColor="Red"
@@ -96,7 +97,7 @@
                 <div class="form-group">
                     <label for="ClaveTextBox" class="col-md-3 control-label input-sm">Contraseña</label>
                     <div class="col-md-6">
-                        <asp:TextBox ID="ClaveTextBox" TextMode="Password" runat="server"
+                        <asp:TextBox ID="ClaveTextBox" placeHolder="Nombre de usuarios" TextMode="Password" runat="server"
                             Class="form-control input-sm"></asp:TextBox>
                         <asp:RequiredFieldValidator
                             runat="server" ID="RFVContrasenia"
@@ -112,7 +113,7 @@
                 <div class="form-group">
                     <label for="ClaveConfTextBox" class="col-md-3 control-label input-sm">Confirmar</label>
                     <div class="col-md-6">
-                        <asp:TextBox ID="ClaveConfTextBox" TextMode="Password" runat="server"
+                        <asp:TextBox ID="ClaveConfTextBox" placeHolder="Nombre de usuarios" TextMode="Password" runat="server"
                             Class="form-control input-sm"></asp:TextBox>
                         <asp:RequiredFieldValidator
                             runat="server" ID="RFVConfirmarContrasenia"
@@ -125,12 +126,19 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <!-- RadioButton Tipousuario-->
-                    <label for="AdministradorRadioButton" class="col-md-3 control-label input-sm">Tipo de Usuario</label>
+                    <label for="lb_AdministradorRadioButton" class="col-md-3 control-label input-sm ">Tipo de Usuario</label>
                     <div class="col-md-6">
-                        <div>
-                            <asp:RadioButton ID="AdministradorRadioButton" runat="server" Text="Administrador" GroupName="TipoUsuario" />
-                            <asp:RadioButton ID="UsuarioRadioButton" runat="server" Text="Usuario Normal" GroupName="TipoUsuario" />
+                        <div class="btn-group" data-toggle="buttons">
+                            <label runat="server" id="lb_AdministradorRadioButton" class="btn btn-default">
+                                <asp:RadioButton runat="server" ID="AdministradorRadioB" GroupName="radioTipo"  AutoPostBack="True" />
+                                Administrador
+                           
+                            </label>
+                            <label runat="server" id="lbl_UsuariosRadioButton" class="btn btn-default">
+                                <asp:RadioButton runat="server" ID="UsuariosRadioButton" GroupName="radioTipo" AutoPostBack="True" />
+                                Usuario
+                           
+                            </label>
                         </div>
                     </div>
                 </div>
@@ -146,40 +154,4 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script type="text/javascript">  
-
-        function ExisteUsuario() {//This function call on text change.
-            var email = $("#NombreUsuarioTextBox").val();
-            $.ajax({
-                type: "POST",
-                url: "Registros/rUsuarios.aspx/CheckEmail", // this for calling the web method function in cs code.  
-                data: '{NombreUsuario: "' + email + '" }', // user name or email value  
-                contentType: "application/json; charset=utf-8",
-                dataType: "json",
-                success: function OnSuccess(response) {
-                    var msg = $("#<%=lblStatus.ClientID%>")[0];
-                    switch (response.d) {
-                        case "true":
-                            msg.style.display = "block";
-                            msg.style.color = "red";
-                            msg.innerHTML = "Nombre De Usuario Existente.";
-                            break;
-                        case "false":
-                            msg.style.display = "block";
-                            msg.style.color = "green";
-                            msg.innerHTML = "Correcto";
-                            break;
-                    }
-                }
-                ,
-                failure: function (response) {
-                    alert(response);
-                }
-            });
-        }
-        // function OnSuccess
-
-
-    </script>
 </asp:Content>

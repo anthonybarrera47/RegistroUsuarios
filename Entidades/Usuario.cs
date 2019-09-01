@@ -12,9 +12,9 @@ namespace Entidades
         [Key]
         public int UsuarioID { get; set; }
         public string UserName { get; set; }
-        public String Nombre { get; set; }
-        public String Password { get; set; }
-        public String TipoUsuario { get; set; }
+        public string Nombre { get; set; }
+        public string Password { get; set; }
+        public string TipoUsuario { get; set; }
         public DateTime FechaRegistro { get; set; }
 
         public Usuarios()
