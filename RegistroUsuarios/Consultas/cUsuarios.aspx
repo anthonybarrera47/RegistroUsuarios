@@ -29,22 +29,24 @@
                 </div>
                 <%--GRID--%>
                 <div class="col-md-12">
-                    <asp:GridView ID="DatosGridView"
-                        runat="server"
-                        class="table table-condensed table-bordered table-responsive"
-                        CellPadding="4" ForeColor="#333333" GridLines="None">
+                    <div class="table table-condensed table-bordered table-responsive">
+                        <asp:GridView ID="DatosGridView"
+                            runat="server"
+                            CssClass="table table-condensed table-bordered table-responsive"
+                            CellPadding="4" ForeColor="#333333" GridLines="None">
 
-                        <AlternatingRowStyle BackColor="LightBlue" />
+                            <AlternatingRowStyle BackColor="LightBlue" />
 
-                        <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
-                        <RowStyle BackColor="#EFF3FB" />
-                        <Columns>
-                            <asp:HyperLinkField ControlStyle-ForeColor="blue"
-                                DataNavigateUrlFields="UsuarioID"
-                                DataNavigateUrlFormatString="~/Registros/rUsuarios.aspx?Id={0}"
-                                Text="Editar"></asp:HyperLinkField>
-                        </Columns>
-                    </asp:GridView>
+                            <HeaderStyle BackColor="#507CD1" Font-Bold="True" ForeColor="White" />
+                            <RowStyle BackColor="#EFF3FB" />
+                            <Columns>
+                                <asp:HyperLinkField ControlStyle-ForeColor="blue"
+                                    DataNavigateUrlFields="UsuarioID"
+                                    DataNavigateUrlFormatString="~/Registros/rUsuarios.aspx?Id={0}"
+                                    Text="Editar"></asp:HyperLinkField>
+                            </Columns>
+                        </asp:GridView>
+                    </div>
                 </div>
             </div>
         </div>
