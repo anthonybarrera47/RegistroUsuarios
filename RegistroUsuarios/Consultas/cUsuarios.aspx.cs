@@ -7,6 +7,7 @@ using RegistroUsuarios.Extensiones;
 using System.Web.UI.WebControls;
 using Entidades;
 using System.Linq.Expressions;
+using BLL;
 
 namespace RegistroUsuarios.Consultas
 {
@@ -20,7 +21,7 @@ namespace RegistroUsuarios.Consultas
         {
             //Inicializando el filtro en True
             Expression<Func<Usuarios, bool>> filtro = x => true;
-            BLL.RepositorioBase<Usuarios> repositorio = new BLL.RepositorioBase<Usuarios>();
+            RepositorioBase<Usuarios> repositorio = new RepositorioBase<Usuarios>();
 
             int id;
             switch (BuscarPorDropDownList.SelectedIndex)
@@ -38,6 +39,7 @@ namespace RegistroUsuarios.Consultas
             }
             DatosGridView.DataSource = repositorio.GetList(filtro);
             DatosGridView.DataBind();
+            repositorio.Dispose();
         }
     }
 }

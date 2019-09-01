@@ -27,7 +27,26 @@
             });
         }
     </script>
-
+    <script type="text/javascript">
+        function erroralertuser() {
+            swal({
+                title: "Fallo!",
+                text: "Usuario Ya existe en la base de datos",
+                icon: "error",
+                button: "Continuar!",
+            });
+        }
+    </script>
+    <script type="text/javascript">
+        function erroralertclave() {
+            swal({
+                title: "Fallo!",
+                text: "Contraseñas no coinciden",
+                icon: "error",
+                button: "Continuar!",
+            });
+        }
+    </script>
     <div class="panel panel-primary">
         <div class="panel-heading">Registro de Usuarios</div>
         <div class="panel-body">
@@ -45,23 +64,73 @@
                     <div class="col-md-6">
                         <asp:TextBox ID="NombreTextBox" runat="server"
                             Class="form-control input-sm"></asp:TextBox>
-                        <%--<asp:RequiredFieldValidator ID="RFVNombre" runat="server" MaxLength="200" 
-                            ControlToValidate="NombreTextBox" 
-                            ErrorMessage="Campo Nombre obligatorio" ForeColor="Red" 
-                            Display="Dynamic" SetFocusOnError="True" 
-                            ToolTip="Campo Nombre obligatorio">Por favor llenar el campo Nombre
-                        </asp:RequiredFieldValidator>--%>
+                        <asp:RequiredFieldValidator
+                            runat="server" ID="RFVNombreTextBox"
+                            ControlToValidate="NombreTextBox" ForeColor="Red"
+                            ErrorMessage="Por favor llenar el campo Nombre!"
+                            Display="Dynamic" SetFocusOnError="true"
+                            ToolTip="Campo Nombre Obligatorio">
+
+                        </asp:RequiredFieldValidator>
+
+                    </div>
+                </div>
+                <%--Nombre de Usuario--%>
+                <div class="form-group">
+                    <label for="NombreUsuarioTextBox" class="col-md-3 control-label input-sm">Nombre de Usuario</label>
+                    <div class="col-md-6">
+                        <asp:TextBox ID="NombreUsuarioTextBox" runat="server"
+                            Class="form-control input-sm" OnTextChanged="NombreUsuarioTextChanged"></asp:TextBox>
+                        <asp:RequiredFieldValidator
+                            runat="server" ID="RFVNombreUsuarioTextBox"
+                            ControlToValidate="NombreUsuarioTextBox" ForeColor="Red"
+                            ErrorMessage="Por favor llenar el campo Nombre de usuario!"
+                            Display="Dynamic" SetFocusOnError="true"
+                            ToolTip="Campo Nombre Usuario Obligatorio">
+
+                        </asp:RequiredFieldValidator>
+                    </div>
+                    <asp:Label ID="lblStatus" runat="server" Text=""></asp:Label>
+                </div>
+                <%--Contraseña--%>
+                <div class="form-group">
+                    <label for="ClaveTextBox" class="col-md-3 control-label input-sm">Contraseña</label>
+                    <div class="col-md-6">
+                        <asp:TextBox ID="ClaveTextBox" TextMode="Password" runat="server"
+                            Class="form-control input-sm"></asp:TextBox>
+                        <asp:RequiredFieldValidator
+                            runat="server" ID="RFVContrasenia"
+                            ControlToValidate="ClaveTextBox" ForeColor="Red"
+                            ErrorMessage="Por favor llenar el campo Contraseña!"
+                            Display="Dynamic" SetFocusOnError="true"
+                            ToolTip="Campo Contraseña Obligatorio">
+
+                        </asp:RequiredFieldValidator>
+                    </div>
+                </div>
+                <%--Confirmar Contraseña--%>
+                <div class="form-group">
+                    <label for="ClaveConfTextBox" class="col-md-3 control-label input-sm">Confirmar</label>
+                    <div class="col-md-6">
+                        <asp:TextBox ID="ClaveConfTextBox" TextMode="Password" runat="server"
+                            Class="form-control input-sm"></asp:TextBox>
+                        <asp:RequiredFieldValidator
+                            runat="server" ID="RFVConfirmarContrasenia"
+                            ControlToValidate="ClaveConfTextBox" ForeColor="Red"
+                            ErrorMessage="Contraseña no coincide!"
+                            Display="Dynamic" SetFocusOnError="true"
+                            ToolTip="Contraseña no coincide">
+
+                        </asp:RequiredFieldValidator>
                     </div>
                 </div>
                 <div class="form-group">
                     <!-- RadioButton Tipousuario-->
-                    <label for="AdministradorRadioButton" class="col-md-3 control-label input-sm">Nombre</label>
+                    <label for="AdministradorRadioButton" class="col-md-3 control-label input-sm">Tipo de Usuario</label>
                     <div class="col-md-6">
-                        <div class="form-check">
-                            <input type="radio" class="form-check-input" id="AdministradorRadioButton" name="materialExampleRadios" checked>
-                            <label class="form-check-label" for="AdministradorRadioButton">Administrador</label>
-                            <input type="radio" class="form-check-input" id="UsuarioRadioButton" name="materialExampleRadios" checked>
-                            <label class="form-check-label" for="UsuarioRadioButton">Usuario Normal</label>
+                        <div>
+                            <asp:RadioButton ID="AdministradorRadioButton" runat="server" Text="Administrador" GroupName="TipoUsuario" />
+                            <asp:RadioButton ID="UsuarioRadioButton" runat="server" Text="Usuario Normal" GroupName="TipoUsuario" />
                         </div>
                     </div>
                 </div>
@@ -73,8 +142,44 @@
             <div class="form-group" style="display: inline-block">
                 <asp:Button Text="Nuevo" class="btn btn-warning btn-sm" runat="server" ID="NuevoButton" OnClick="NuevoButton_Click" />
                 <asp:Button Text="Guardar" class="btn btn-success btn-sm" runat="server" ID="GuadarButton" OnClick="GuardarButton_Click" />
-                <asp:Button Text="Eliminar" class="btn btn-danger btn-sm" runat="server" ID="EliminarButton" />
+                <asp:Button Text="Eliminar" class="btn btn-danger btn-sm" runat="server" ID="EliminarButton" OnClick="EliminarButton_Click" />
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+    <script type="text/javascript">  
+
+        function ExisteUsuario() {//This function call on text change.
+            var email = $("#NombreUsuarioTextBox").val();
+            $.ajax({
+                type: "POST",
+                url: "Registros/rUsuarios.aspx/CheckEmail", // this for calling the web method function in cs code.  
+                data: '{NombreUsuario: "' + email + '" }', // user name or email value  
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function OnSuccess(response) {
+                    var msg = $("#<%=lblStatus.ClientID%>")[0];
+                    switch (response.d) {
+                        case "true":
+                            msg.style.display = "block";
+                            msg.style.color = "red";
+                            msg.innerHTML = "Nombre De Usuario Existente.";
+                            break;
+                        case "false":
+                            msg.style.display = "block";
+                            msg.style.color = "green";
+                            msg.innerHTML = "Correcto";
+                            break;
+                    }
+                }
+                ,
+                failure: function (response) {
+                    alert(response);
+                }
+            });
+        }
+        // function OnSuccess
+
+
+    </script>
 </asp:Content>

@@ -17,6 +17,7 @@
                         <asp:ListItem>Todos</asp:ListItem>
                         <asp:ListItem>UsuariosID</asp:ListItem>
                         <asp:ListItem>Nombre</asp:ListItem>
+                        <asp:ListItem>Nombre de Usuario</asp:ListItem>
                     </asp:DropDownList>
                 </div>
                 <div class="col-md-6">
