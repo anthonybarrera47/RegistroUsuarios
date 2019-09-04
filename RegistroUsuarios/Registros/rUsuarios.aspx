@@ -71,7 +71,6 @@
                             ErrorMessage="Por favor llenar el campo Nombre!"
                             Display="Dynamic" SetFocusOnError="true"
                             ToolTip="Campo Nombre Obligatorio">
-
                         </asp:RequiredFieldValidator>
 
                     </div>

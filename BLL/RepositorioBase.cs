@@ -82,6 +82,20 @@ namespace BLL
             }
             return paso;
         }
+        public bool ValidarUsuario(string NombreUsuario)
+        {
+            bool paso = true;
+            RepositorioBase<Entidades.Usuarios> repositorio = new RepositorioBase<Entidades.Usuarios>();
+            List<Entidades.Usuarios> usuario = new List<Entidades.Usuarios>();
+            Expression<Func<Entidades.Usuarios, bool>> filtro = x => true;
+            var username = NombreUsuario;
+            filtro = x => x.UserName.Equals(username);
+            usuario = repositorio.GetList(filtro);
+            if (usuario.Exists(x => username.Equals(username)))
+                paso = false;
+            repositorio.Dispose();
+            return paso;
+        }
         public virtual void Dispose()
         {
             this._db.Dispose();

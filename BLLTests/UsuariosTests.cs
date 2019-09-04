@@ -10,7 +10,7 @@ using Entidades;
 namespace BLL.Tests
 {
     [TestClass()]
-    public class RepositorioBaseTests
+    public class UsuariosTests
     {
         [TestMethod()]
         public void GuardarTest()

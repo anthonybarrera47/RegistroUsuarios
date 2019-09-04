@@ -25,7 +25,7 @@ namespace RegistroUsuarios.Registros
                     RepositorioBase<Usuarios> repositorio = new RepositorioBase<Usuarios>();
                     Usuarios user = repositorio.Buscar(id);
                     if (user == null)
-                        Alerta(2);
+                        Alerta(TipoAlerta.ErrorAlert);
                     else
                         LlenaCampos(user);
                     repositorio.Dispose();
@@ -55,10 +55,9 @@ namespace RegistroUsuarios.Registros
             RepositorioBase<Usuarios> repositorio = new RepositorioBase<Usuarios>();
             bool paso = false;
             Usuarios user = LlenaClase();
-
             if (user.UsuarioID == 0)
             {
-                if (!ValidarUsuario())
+                if (!repositorio.ValidarUsuario(user.UserName))
                     return;
                 paso = repositorio.Guardar(user);
             }
@@ -70,8 +69,12 @@ namespace RegistroUsuarios.Registros
                     paso = repositorio.Modificar(user);
                 else
                 {
-                    if (!ValidarUsuario())
+                    if (!repositorio.ValidarUsuario(user.UserName))
+                    {
+                        Alerta(TipoAlerta.ErrorAlertUser);
                         return;
+                    }
+              
                     paso = repositorio.Modificar(user);
                 }
                 repositorioBase.Dispose();
@@ -79,40 +82,25 @@ namespace RegistroUsuarios.Registros
                 
             if (paso)
             { 
-                Alerta(1);
+                Alerta(TipoAlerta.SuccessAlert);
                 Limpiar();
             }
             else
-                Alerta(2);
+                Alerta(TipoAlerta.ErrorAlert);
             repositorio.Dispose();
         }
-        public bool ValidarUsuario()
+        
+        private void Alerta(TipoAlerta tipoAlerta)
         {
-            bool paso = true;
-            RepositorioBase<Usuarios> repositorio = new RepositorioBase<Usuarios>();
-            List<Usuarios> usuario = new List<Usuarios>();
-            Expression<Func<Usuarios, bool>> filtro = x => true;
-            var username = NombreUsuarioTextBox.Text;
-            filtro = x => x.UserName.Equals(username);
-            usuario = repositorio.GetList(filtro);
-            if (usuario.Exists(x => username.Equals(username)))
-            {
-                Alerta(3);
-                paso = false;
-            }
-            repositorio.Dispose();
-            return paso;
-        }
-        private void Alerta(int tipoError)
-        {
-            if (tipoError == 1)
+            ScriptManager.RegisterStartupScript(this, GetType(), "alert", $"{ tipoAlerta.ToString().ToLower()}()", true);
+            /*if (tipoError == 1)
                 ScriptManager.RegisterStartupScript(this, GetType(), "alert", "successalert()", true);
             if (tipoError == 2)
                 ScriptManager.RegisterStartupScript(this, GetType(), "alert", "erroralert()", true);
             if (tipoError == 3)
                 ScriptManager.RegisterStartupScript(this, GetType(), "alert", "erroralertuser()", true);
             if (tipoError == 4)
-                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "erroralertclave()", true);
+                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "erroralertclave()", true);*/
         }
         private Usuarios LlenaClase()
         {
@@ -143,11 +131,11 @@ namespace RegistroUsuarios.Registros
             Usuarios user = repositorio.Buscar(id);
 
             if (user == null)
-                Alerta(2);
+                Alerta(TipoAlerta.ErrorAlert);
             else
             {
                 repositorio.Eliminar(id);
-                Alerta(1);
+                Alerta(TipoAlerta.SuccessAlert);
             }
             repositorio.Dispose();
         }
@@ -155,7 +143,7 @@ namespace RegistroUsuarios.Registros
         {
             if (!ClaveTextBox.Text.SHA1().Equals(ClaveConfTextBox.Text.SHA1()))
             {
-                Alerta(4);
+                Alerta(TipoAlerta.ErrorAlertClave);
                 return false;
             }  
             return true;
