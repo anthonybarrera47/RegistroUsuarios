@@ -24,7 +24,7 @@ namespace RegistroUsuarios.Registros
                 {
                     RepositorioBase<Usuarios> repositorio = new RepositorioBase<Usuarios>();
                     Usuarios user = repositorio.Buscar(id);
-                    if (user == null)
+                    if (user.EsUsuarioNulo())
                         Alerta(TipoAlerta.ErrorAlert);
                     else
                         LlenaCampos(user);
@@ -53,54 +53,53 @@ namespace RegistroUsuarios.Registros
             if (!ValidarClave())
                 return;
             RepositorioBase<Usuarios> repositorio = new RepositorioBase<Usuarios>();
+            RepositorioBase<Usuarios> repositorioBase = new RepositorioBase<Usuarios>();
             bool paso = false;
             Usuarios user = LlenaClase();
-            if (user.UsuarioID == 0)
+            try
             {
-                if (!repositorio.ValidarUsuario(user.UserName))
-                    return;
-                paso = repositorio.Guardar(user);
-            }
-            else
-            {
-                RepositorioBase<Usuarios> repositorioBase = new RepositorioBase<Usuarios>();
-                Usuarios OldUser = repositorioBase.Buscar(user.UsuarioID);
-                if (OldUser.UserName.Equals(user.UserName))
-                    paso = repositorio.Modificar(user);
+
+                if (user.UsuarioID == 0)
+                {
+                    if (!RepositorioUsuarios.ValidarUsuario(user.UserName))
+                        return;
+                    paso = repositorio.Guardar(user);
+                }
                 else
                 {
-                    if (!repositorio.ValidarUsuario(user.UserName))
+                    Usuarios OldUser = repositorioBase.Buscar(user.UsuarioID);
+                    if (OldUser.UserName.Equals(user.UserName))
+                        paso = repositorio.Modificar(user);
+                    else
                     {
-                        Alerta(TipoAlerta.ErrorAlertUser);
-                        return;
+                        if (!RepositorioUsuarios.ValidarUsuario(user.UserName))
+                        {
+                            Alerta(TipoAlerta.ErrorAlertUser);
+                            return;
+                        }
+                        paso = repositorio.Modificar(user);
                     }
-              
-                    paso = repositorio.Modificar(user);
                 }
+                if (paso)
+                {
+                    Alerta(TipoAlerta.SuccessAlert);
+                    Limpiar();
+                }
+                else
+                    Alerta(TipoAlerta.ErrorAlert);
+            }
+            catch (Exception)
+            { throw; }
+            finally
+            {
+                repositorio.Dispose();
                 repositorioBase.Dispose();
             }
-                
-            if (paso)
-            { 
-                Alerta(TipoAlerta.SuccessAlert);
-                Limpiar();
-            }
-            else
-                Alerta(TipoAlerta.ErrorAlert);
-            repositorio.Dispose();
+
         }
-        
         private void Alerta(TipoAlerta tipoAlerta)
         {
             ScriptManager.RegisterStartupScript(this, GetType(), "alert", $"{ tipoAlerta.ToString().ToLower()}()", true);
-            /*if (tipoError == 1)
-                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "successalert()", true);
-            if (tipoError == 2)
-                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "erroralert()", true);
-            if (tipoError == 3)
-                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "erroralertuser()", true);
-            if (tipoError == 4)
-                ScriptManager.RegisterStartupScript(this, GetType(), "alert", "erroralertclave()", true);*/
         }
         private Usuarios LlenaClase()
         {
@@ -110,7 +109,7 @@ namespace RegistroUsuarios.Registros
             user.UsuarioID = IdTextBox.Text.ToInt();
             user.Nombre = NombreTextBox.Text;
             user.UserName = NombreUsuarioTextBox.Text;
-            user.Password = ClaveTextBox.Text.SHA1();
+            user.Password = RepositorioUsuarios.SHA1(ClaveTextBox.Text);
             user.TipoUsuario = GetTipoUsuario();
             return user;
         }
@@ -119,18 +118,16 @@ namespace RegistroUsuarios.Registros
             IdTextBox.Text = user.UsuarioID.ToString();
             NombreTextBox.Text = user.Nombre;
             NombreUsuarioTextBox.Text = user.UserName;
-            ClaveTextBox.Text = user.Password.SHA1();
-            ClaveConfTextBox.Text = user.Password.SHA1();
+            ClaveTextBox.Text = RepositorioUsuarios.SHA1(user.Password);
+            ClaveConfTextBox.Text = RepositorioUsuarios.SHA1(user.Password);
             AdministradorRadioB.Checked = user.TipoUsuario.Equals("A") ? true : false;
         }
         protected void EliminarButton_Click(object sender, EventArgs e)
         {
             RepositorioBase<Usuarios> repositorio = new RepositorioBase<Usuarios>();
-            int id = (IdTextBox.Text).ToInt();
-
+            int id = ((IdTextBox.Text).isEmpty()) ? 0 : (IdTextBox.Text).ToInt();
             Usuarios user = repositorio.Buscar(id);
-
-            if (user == null)
+            if (user.EsUsuarioNulo())
                 Alerta(TipoAlerta.ErrorAlert);
             else
             {
@@ -141,27 +138,16 @@ namespace RegistroUsuarios.Registros
         }
         private bool ValidarClave()
         {
-            if (!ClaveTextBox.Text.SHA1().Equals(ClaveConfTextBox.Text.SHA1()))
+            if (!RepositorioUsuarios.SHA1(ClaveTextBox.Text).Equals(RepositorioUsuarios.SHA1(ClaveConfTextBox.Text)))
             {
                 Alerta(TipoAlerta.ErrorAlertClave);
                 return false;
-            }  
+            }
             return true;
         }
         private string GetTipoUsuario()
         {
-            string value;
-            List<Tuple<RadioButton, HtmlGenericControl>> listRadio = new List<Tuple<RadioButton, HtmlGenericControl>>();
-            listRadio.Add(new Tuple<RadioButton, HtmlGenericControl>(AdministradorRadioB, lb_AdministradorRadioButton));
-            listRadio.Add(new Tuple<RadioButton, HtmlGenericControl>(UsuariosRadioButton, lbl_UsuariosRadioButton));
-
-            foreach (Tuple<RadioButton, HtmlGenericControl> objPair in listRadio)
-            {
-                objPair.Item2.Attributes["class"] = "btn btn-default " + (objPair.Item1.Checked ? " active" : "");
-                objPair.Item2.Attributes["onclick"] = "javascript:setTimeout('__doPostBack(\\'" + objPair.Item1.ClientID + "\\',\\'\\')', 0);";
-            }
-            value = AdministradorRadioB.Checked ? "A" :  "U";
-            return value;
+            return AdministradorRadioB.Checked ? "A" : "U"; ;
         }
         //ScriptManager.RegisterStartupScript(this, GetType(), "Popup", "successalert();", true);
     }
