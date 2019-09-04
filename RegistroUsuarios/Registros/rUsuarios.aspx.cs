@@ -31,9 +31,7 @@ namespace RegistroUsuarios.Registros
                     repositorio.Dispose();
                 }
                 else
-                {
                     Limpiar();
-                }
             }
         }
         protected void NuevoButton_Click(object sender, EventArgs e)
@@ -42,7 +40,7 @@ namespace RegistroUsuarios.Registros
         }
         private void Limpiar()
         {
-            IdTextBox.Text = string.Empty;
+            IdTextBox.Text = "0";
             NombreTextBox.Text = string.Empty;
             NombreUsuarioTextBox.Text = string.Empty;
             ClaveTextBox.Text = string.Empty;
@@ -58,7 +56,6 @@ namespace RegistroUsuarios.Registros
             Usuarios user = LlenaClase();
             try
             {
-
                 if (user.UsuarioID == 0)
                 {
                     if (!RepositorioUsuarios.ValidarUsuario(user.UserName))
