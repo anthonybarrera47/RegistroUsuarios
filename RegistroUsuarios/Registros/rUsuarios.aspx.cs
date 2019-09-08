@@ -53,23 +53,17 @@ namespace RegistroUsuarios.Registros
             RepositorioBase<Usuarios> repositorio = new RepositorioBase<Usuarios>();
             bool paso = false;
             Usuarios user = LlenaClase();
+            if (!RepositorioUsuarios.ValidarUsuario(user))
+            {
+                Extensores.Alerta(this, TipoAlerta.ErrorAlertUser);
+                return;
+            }
             try
             {
                 if (user.UsuarioID == 0)
-                {
-                    if (!RepositorioUsuarios.ValidarUsuario(user))
-                        return;
                     paso = repositorio.Guardar(user);
-                }
                 else
-                {
-                    if (!RepositorioUsuarios.ValidarUsuario(user))
-                    {
-                        Extensores.Alerta(this, TipoAlerta.ErrorAlertUser);
-                        return;
-                    }
                     paso = repositorio.Modificar(user);            
-                }
                 if (paso)
                 {
                     Extensores.Alerta(this, TipoAlerta.SuccessAlert);
