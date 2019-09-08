@@ -25,7 +25,7 @@ namespace RegistroUsuarios.Registros
                     RepositorioBase<Usuarios> repositorio = new RepositorioBase<Usuarios>();
                     Usuarios user = repositorio.Buscar(id);
                     if (user.EsUsuarioNulo())
-                        Alerta(TipoAlerta.ErrorAlert);
+                        Extensores.Alerta(this, TipoAlerta.ErrorAlert);
                     else
                         LlenaCampos(user);
                     repositorio.Dispose();
@@ -51,56 +51,46 @@ namespace RegistroUsuarios.Registros
             if (!ValidarClave())
                 return;
             RepositorioBase<Usuarios> repositorio = new RepositorioBase<Usuarios>();
-            RepositorioBase<Usuarios> repositorioBase = new RepositorioBase<Usuarios>();
             bool paso = false;
             Usuarios user = LlenaClase();
             try
             {
                 if (user.UsuarioID == 0)
                 {
-                    if (!RepositorioUsuarios.ValidarUsuario(user.UserName))
+                    if (!RepositorioUsuarios.ValidarUsuario(user))
                         return;
                     paso = repositorio.Guardar(user);
                 }
                 else
                 {
-                    Usuarios OldUser = repositorioBase.Buscar(user.UsuarioID);
-                    if (OldUser.UserName.Equals(user.UserName))
-                        paso = repositorio.Modificar(user);
-                    else
+                    if (!RepositorioUsuarios.ValidarUsuario(user))
                     {
-                        if (!RepositorioUsuarios.ValidarUsuario(user.UserName))
-                        {
-                            Alerta(TipoAlerta.ErrorAlertUser);
-                            return;
-                        }
-                        paso = repositorio.Modificar(user);
+                        Extensores.Alerta(this, TipoAlerta.ErrorAlertUser);
+                        return;
                     }
+                    paso = repositorio.Modificar(user);            
                 }
                 if (paso)
                 {
-                    Alerta(TipoAlerta.SuccessAlert);
+                    Extensores.Alerta(this, TipoAlerta.SuccessAlert);
                     Limpiar();
                 }
                 else
-                    Alerta(TipoAlerta.ErrorAlert);
+                    Extensores.Alerta(this, TipoAlerta.ErrorAlert);
             }
             catch (Exception)
             { throw; }
             finally
             {
                 repositorio.Dispose();
-                repositorioBase.Dispose();
             }
 
         }
-        private void Alerta(TipoAlerta tipoAlerta)
-        {
-            ScriptManager.RegisterStartupScript(this, GetType(), "alert", $"{ tipoAlerta.ToString().ToLower()}()", true);
-        }
+
         private Usuarios LlenaClase()
         {
             Usuarios user = new Usuarios();
+
             if (IdTextBox.Text.Equals(string.Empty))
                 IdTextBox.Text = "0";
             user.UsuarioID = IdTextBox.Text.ToInt();
@@ -125,11 +115,12 @@ namespace RegistroUsuarios.Registros
             int id = ((IdTextBox.Text).isEmpty()) ? 0 : (IdTextBox.Text).ToInt();
             Usuarios user = repositorio.Buscar(id);
             if (user.EsUsuarioNulo())
-                Alerta(TipoAlerta.ErrorAlert);
+                Extensores.Alerta(this, TipoAlerta.ErrorAlert);
             else
             {
                 repositorio.Eliminar(id);
-                Alerta(TipoAlerta.SuccessAlert);
+                Limpiar();
+                Extensores.Alerta(this, TipoAlerta.SuccessAlert);
             }
             repositorio.Dispose();
         }
@@ -137,7 +128,7 @@ namespace RegistroUsuarios.Registros
         {
             if (!RepositorioUsuarios.SHA1(ClaveTextBox.Text).Equals(RepositorioUsuarios.SHA1(ClaveConfTextBox.Text)))
             {
-                Alerta(TipoAlerta.ErrorAlertClave);
+                Extensores.Alerta(this.Page, TipoAlerta.ErrorAlertClave);
                 return false;
             }
             return true;
@@ -146,6 +137,5 @@ namespace RegistroUsuarios.Registros
         {
             return AdministradorRadioB.Checked ? "A" : "U"; ;
         }
-        //ScriptManager.RegisterStartupScript(this, GetType(), "Popup", "successalert();", true);
     }
 }

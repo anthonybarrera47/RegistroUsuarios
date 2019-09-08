@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entidades
 {
+    [Serializable]
     public class Usuarios
     {
         [Key]
@@ -16,7 +17,7 @@ namespace Entidades
         public string Password { get; set; }
         public string TipoUsuario { get; set; }
         public DateTime FechaRegistro { get; set; }
-
+        public virtual List<TelefonoDetalle> TelefonoDetalle { get; set; }
         public Usuarios()
         {
             UsuarioID = 0;
@@ -25,15 +26,17 @@ namespace Entidades
             Password = string.Empty;
             TipoUsuario = string.Empty;
             FechaRegistro = DateTime.Now;
+            TelefonoDetalle = new List<TelefonoDetalle>();
         }
-        public Usuarios(int usuarioId, string userName, string nombre, string password, string tipo, DateTime fechaRegistro)
+        public Usuarios(int usuarioID, string userName, string nombre, string password, string tipoUsuario, DateTime fechaRegistro, List<TelefonoDetalle> telefonoDetalle)
         {
-            UsuarioID = usuarioId;
+            UsuarioID = usuarioID;
             UserName = userName;
             Nombre = nombre;
             Password = password;
-            TipoUsuario = tipo;
+            TipoUsuario = tipoUsuario;
             FechaRegistro = fechaRegistro;
+            TelefonoDetalle = telefonoDetalle;
         }
     }
 }

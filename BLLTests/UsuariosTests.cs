@@ -18,15 +18,17 @@ namespace BLL.Tests
             Usuarios user = new Usuarios();
             RepositorioBase<Usuarios> db = new RepositorioBase<Usuarios>();
             user.Nombre = "Anthony";
+            user.TelefonoDetalle.Add(new TelefonoDetalle(0,"829-935-9510",1,1));
             Assert.AreEqual(true, db.Guardar(user));
         }
         [TestMethod()]
         public void ModificarTest()
         {
             Usuarios user = new Usuarios();
-            RepositorioBase<Usuarios> db = new RepositorioBase<Usuarios>();
+            RepositorioUsuarios db = new RepositorioUsuarios();
             user.UsuarioID = 1;
             user.Nombre = "Anthony Barrera";
+            user.TelefonoDetalle.Add(new TelefonoDetalle(0, "829-935-9510", 1, 1));
             Assert.AreEqual(true, db.Modificar(user));
         }
         [TestMethod()]

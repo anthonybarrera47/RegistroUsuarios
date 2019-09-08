@@ -15,7 +15,7 @@ namespace BLL
         {
             _db = new Contexto();
         }
-        public T Buscar(int id)
+        public virtual T Buscar(int id)
         {
             T entity;
             try

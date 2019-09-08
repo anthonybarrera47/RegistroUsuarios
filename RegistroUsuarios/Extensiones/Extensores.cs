@@ -23,9 +23,14 @@ namespace RegistroUsuarios.Extensiones
         {
             return usuarios==null;
         }
+        public static void Alerta(Page page, TipoAlerta tipoAlerta)
+        {
+            ScriptManager.RegisterStartupScript(page, page.GetType(), "alert", $"{ tipoAlerta.ToString().ToLower()}()", true);
+        }
         public static void MostrarMensaje(Page page,Type type,String key,String script,bool addStringTag)
         {
             ScriptManager.RegisterStartupScript(page,type,key,script,addStringTag);
         }
+        
     }
 }

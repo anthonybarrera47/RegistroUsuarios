@@ -8,46 +8,7 @@
 
 <asp:Content ContentPlaceHolderID="MainContent" runat="server">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js" type="text/javascript"></script>
-    <script type="text/javascript">
-        function successalert() {
-            swal({
-                title: "Exito!!",
-                text: "Su registro ha sido guardado Exitosamente",
-                icon: "success",
-                button: "Continuar!",
-            });
-        }
-    </script>
-    <script type="text/javascript">
-        function erroralert() {
-            swal({
-                title: "Fallo!",
-                text: "Su registro no ha sido guardado",
-                icon: "error",
-                button: "Continuar!",
-            });
-        }
-    </script>
-    <script type="text/javascript">
-        function erroralertuser() {
-            swal({
-                title: "Fallo!",
-                text: "Usuario Ya existe en la base de datos",
-                icon: "error",
-                button: "Continuar!",
-            });
-        }
-    </script>
-    <script type="text/javascript">
-        function erroralertclave() {
-            swal({
-                title: "Fallo!",
-                text: "Contraseñas no coinciden",
-                icon: "error",
-                button: "Continuar!",
-            });
-        }
-    </script>
+    
     <div class="panel panel-primary">
         <div class="panel-heading">Registro de Usuarios</div>
         <div class="panel-body">
@@ -129,7 +90,7 @@
                     <div class="col-md-6">
                         <div class="btn-group" data-toggle="buttons">
                             <label runat="server" id="lb_AdministradorRadioButton" class="btn btn-default">
-                                <asp:RadioButton runat="server" ID="AdministradorRadioB" GroupName="radioTipo"  AutoPostBack="True" />
+                                <asp:RadioButton runat="server" ID="AdministradorRadioB" GroupName="radioTipo" AutoPostBack="True" />
                                 Administrador
                            
                             </label>
